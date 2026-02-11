@@ -47,7 +47,7 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-xl font-bold text-slate-900">전체 신청 관리</h3>
-          <p className="text-slate-500 text-sm">부서별 비품 신청을 승인하거나 처리 상태를 관리합니다.</p>
+          <p className="text-slate-500 text-sm">비품 신청을 승인하거나 처리 상태를 관리합니다.</p>
         </div>
         <div className="flex gap-2 text-sm text-slate-500">
           <span>대기: {requests.filter(r => r.status === RequestStatus.PENDING).length}건</span>
@@ -61,7 +61,7 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50 border-b border-slate-200">
-                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">신청자/부서</th>
+                <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">신청자</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">품목(수량)</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">사유 및 URL</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">현재상태</th>
@@ -73,7 +73,6 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
                 <tr key={req.id} className="hover:bg-slate-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-semibold text-slate-900">{req.employeeName}</div>
-                    <div className="text-xs text-slate-500">{req.department}</div>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm font-semibold text-slate-900">{req.item}</div>
