@@ -14,6 +14,7 @@ import {
   applyCancel,
   applyPendingUpdate,
   createRequestRecord,
+  isFinalizedRequest,
   toSupplyRequest
 } from './requestMapper';
 
@@ -121,5 +122,25 @@ export const storageService = {
     });
 
     return canceled;
+  },
+
+  deleteRequest: async (id: string): Promise<boolean> => {
+    const ref = doc(db, REQUESTS_COLLECTION, id);
+    const deleted = await runTransaction(db, async (transaction) => {
+      const snap = await transaction.get(ref);
+      if (!snap.exists()) {
+        return false;
+      }
+
+      const current = toSupplyRequest(snap.id, snap.data());
+      if (!current || !isFinalizedRequest(current.status)) {
+        return false;
+      }
+
+      transaction.delete(ref);
+      return true;
+    });
+
+    return deleted;
   }
 };

@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { SupplyRequest, RequestStatus } from '../types';
 import { storageService } from '../services/storageService';
+import { isFinalizedRequest } from '../services/requestMapper';
 import Badge from './Badge';
 
 interface AdminViewProps {
@@ -22,6 +23,22 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
     } catch (error) {
       console.error('Failed to update request status', error);
       alert('상태 변경 중 오류가 발생했습니다.');
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (!confirm('이 신청 항목을 삭제하시겠습니까?')) return;
+
+    try {
+      const ok = await storageService.deleteRequest(id);
+      if (!ok) {
+        alert('완료/반려/취소 상태에서만 삭제할 수 있습니다.');
+        return;
+      }
+      await onRefresh();
+    } catch (error) {
+      console.error('Failed to delete request', error);
+      alert('항목 삭제 중 오류가 발생했습니다.');
     }
   };
 
@@ -132,8 +149,16 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
                             구매 완료
                           </button>
                         )}
-                        {(req.status === RequestStatus.COMPLETED || req.status === RequestStatus.REJECTED || req.status === RequestStatus.CANCELED) && (
-                          <span className="text-slate-400 text-xs italic">처리됨</span>
+                        {isFinalizedRequest(req.status) && (
+                          <>
+                            <button
+                              onClick={() => handleDelete(req.id)}
+                              className="text-red-500 hover:text-red-600 text-xs font-semibold"
+                            >
+                              삭제
+                            </button>
+                            <span className="text-slate-400 text-xs italic">처리됨</span>
+                          </>
                         )}
                       </div>
                     )}

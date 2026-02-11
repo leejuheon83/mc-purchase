@@ -3,6 +3,7 @@ import {
   applyCancel,
   applyPendingUpdate,
   createRequestRecord,
+  isFinalizedRequest,
   toSupplyRequest
 } from './requestMapper';
 import type { RequestUpdate } from './storageService';
@@ -23,6 +24,14 @@ const createRequest = (overrides: Partial<SupplyRequest> = {}): SupplyRequest =>
 });
 
 describe('requestMapper', () => {
+  it('marks only finalized statuses as deletable', () => {
+    expect(isFinalizedRequest(RequestStatus.COMPLETED)).toBe(true);
+    expect(isFinalizedRequest(RequestStatus.REJECTED)).toBe(true);
+    expect(isFinalizedRequest(RequestStatus.CANCELED)).toBe(true);
+    expect(isFinalizedRequest(RequestStatus.PENDING)).toBe(false);
+    expect(isFinalizedRequest(RequestStatus.APPROVED)).toBe(false);
+  });
+
   it('creates request record with pending status and timestamps', () => {
     const record = createRequestRecord(
       {

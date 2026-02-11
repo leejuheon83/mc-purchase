@@ -100,3 +100,11 @@ export const applyCancel = (
     updatedAt: now
   };
 };
+
+export const isFinalizedRequest = (status: RequestStatus): boolean => {
+  return (
+    status === RequestStatus.COMPLETED ||
+    status === RequestStatus.REJECTED ||
+    status === RequestStatus.CANCELED
+  );
+};
