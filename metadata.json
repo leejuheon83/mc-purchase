@@ -1,0 +1,5 @@
+{
+  "name": "사무용품 신청 싸이트",
+  "description": "An internal portal for employees to request office supplies and for administrators to manage approvals and procurement history.",
+  "requestFramePermissions": []
+}
