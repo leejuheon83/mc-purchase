@@ -1,5 +1,6 @@
-import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp, getApps, getApp, type FirebaseApp } from 'firebase/app';
+import { getAuth, type Auth } from 'firebase/auth';
+import { getFirestore, type Firestore } from 'firebase/firestore';
 
 const getEnvOrDefault = (value: string | undefined, fallback: string): string => {
   const trimmed = value?.trim();
@@ -16,5 +17,6 @@ const firebaseConfig = {
   measurementId: getEnvOrDefault(import.meta.env.VITE_FIREBASE_MEASUREMENT_ID, 'G-4YD77HZJ1Y')
 };
 
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
+const app: FirebaseApp = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+export const auth: Auth = getAuth(app);
+export const db: Firestore = getFirestore(app);
