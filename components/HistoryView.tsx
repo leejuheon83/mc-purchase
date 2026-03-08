@@ -66,7 +66,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
 
   if (requests.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
+      <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.06)] border border-slate-200/90 p-12 text-center">
         <div className="mb-4 flex justify-center">
           <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center">
             <svg className="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -79,11 +79,11 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.06)] border border-slate-200/90 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-200">
+            <tr className="bg-slate-50/70 border-b border-slate-200">
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">신청일자</th>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">품목</th>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">수량</th>
@@ -95,7 +95,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
           <tbody className="divide-y divide-slate-100">
             {requests.map(req => (
               <React.Fragment key={req.id}>
-                <tr className="hover:bg-slate-50 transition-colors">
+                <tr className="hover:bg-slate-50/70 transition-colors">
                   <td className="px-6 py-4 text-sm text-slate-600 whitespace-nowrap">
                     {new Date(req.createdAt).toLocaleDateString()}
                   </td>
@@ -115,7 +115,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                           href={req.purchaseUrl} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 text-xs font-medium"
+                          className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 text-xs font-semibold"
                         >
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                           URL 보기
@@ -162,7 +162,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                   </td>
                 </tr>
                 {editingId === req.id && (
-                  <tr className="bg-slate-50">
+                  <tr className="bg-slate-50/70">
                     <td colSpan={6} className="px-6 py-5">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -170,7 +170,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                           <select
                             value={editItem}
                             onChange={(e) => setEditItem(e.target.value)}
-                            className="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 px-3 border bg-white text-sm"
+                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 bg-white text-sm"
                           >
                             {SUPPLY_ITEMS.map(i => (
                               <option key={i} value={i}>{i}</option>
@@ -183,7 +183,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                               placeholder="신청할 품목명을 직접 입력하세요"
                               value={customItem}
                               onChange={(e) => setCustomItem(e.target.value)}
-                              className="mt-2 w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 px-3 border bg-white text-sm"
+                              className="mt-2 w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 bg-white text-sm"
                             />
                           )}
                         </div>
@@ -195,7 +195,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                             max="100"
                             value={editQuantity}
                             onChange={(e) => setEditQuantity(parseInt(e.target.value) || 1)}
-                            className="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 px-3 border text-sm"
+                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 text-sm"
                           />
                         </div>
                         <div className="md:col-span-2">
@@ -204,7 +204,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                             rows={2}
                             value={editReason}
                             onChange={(e) => setEditReason(e.target.value)}
-                            className="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 px-3 border text-sm"
+                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 text-sm"
                           />
                         </div>
                         <div className="md:col-span-2">
@@ -213,7 +213,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                             type="url"
                             value={editPurchaseUrl}
                             onChange={(e) => setEditPurchaseUrl(e.target.value)}
-                            className="w-full rounded-md border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-2 px-3 border text-sm"
+                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 text-sm"
                           />
                         </div>
                       </div>
@@ -231,7 +231,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                         <button
                           type="button"
                           onClick={handleSave}
-                          className="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 rounded hover:bg-indigo-700"
+                          className="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
                         >
                           저장
                         </button>

@@ -10,11 +10,15 @@ View your app in AI Studio: https://ai.studio/apps/drive/1GCmrmNDnCbQHjoLrUt66tW
 
 ## Run Locally
 
-**Prerequisites:**  Node.js
+**Prerequisites:** Node.js
 
+1. Install dependencies: `npm install`
+2. Create environment file from `env.example`
+3. Set Firebase env values
+4. Run app: `npm run dev`
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Deploy to Vercel
+
+1. Import this GitHub repository in Vercel
+2. Add the same Firebase env values in Vercel Project Settings -> Environment Variables
+3. Deploy

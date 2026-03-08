@@ -101,19 +101,19 @@ const App: React.FC = () => {
   if (!user) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center p-4 font-sans">
-        <div className="bg-white p-10 rounded-2xl shadow-xl w-full max-w-md border border-slate-200">
+        <div className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-9 shadow-[0_16px_48px_rgba(15,23,42,0.08)]">
           <div className="flex flex-col items-center mb-8">
-            <Logo size="lg" className="mb-2" />
-            <p className="text-slate-500 text-sm">내부 직원 전용 사무용품 신청 시스템</p>
+            <Logo size="lg" className="mb-3" />
+            <p className="text-slate-500 text-sm tracking-tight">내부 직원 전용 사무용품 신청 시스템</p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">사원번호</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-2">사원번호</label>
               <input 
                 type="text" 
                 required
-                className="w-full rounded-lg border-slate-200 py-3 px-4 border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/40 py-3 px-4 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-300 transition-all"
                 placeholder="사번을 입력하세요 (예: 120034)"
                 value={loginId}
                 onChange={(e) => setLoginId(e.target.value)}
@@ -121,11 +121,11 @@ const App: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">비밀번호</label>
+              <label className="block text-xs font-semibold text-slate-500 mb-2">비밀번호</label>
               <input 
                 type="password" 
                 required
-                className="w-full rounded-lg border-slate-200 py-3 px-4 border focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/40 py-3 px-4 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-slate-300 focus:border-slate-300 transition-all"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -140,7 +140,7 @@ const App: React.FC = () => {
 
             <button 
               type="submit" 
-              className="w-full bg-[#00529B] text-white font-bold py-3.5 rounded-lg hover:bg-[#003d73] transition-colors shadow-lg active:scale-[0.98]"
+              className="mt-2 w-full bg-[#00529B] text-white font-semibold py-3.5 rounded-xl hover:bg-[#003d73] transition-colors shadow-sm active:scale-[0.99]"
             >
               로그인
             </button>
@@ -166,12 +166,12 @@ const App: React.FC = () => {
       onLogout={handleLogout}
     >
       {activeView === 'REQUEST' && (
-        <RequestView 
-          user={user} 
+        <RequestView
+          user={user}
           onSuccess={async () => {
             await refreshRequests();
             setActiveView('HISTORY');
-          }} 
+          }}
         />
       )}
       

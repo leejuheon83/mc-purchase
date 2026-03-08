@@ -10,7 +10,7 @@ interface BadgeProps {
 const Badge: React.FC<BadgeProps> = ({ status }) => {
   const config = STATUS_UI[status];
   return (
-    <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${config.color}`}>
+    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold border ${config.color}`}>
       {config.label}
     </span>
   );

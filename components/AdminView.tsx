@@ -46,7 +46,7 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h3 className="text-xl font-bold text-slate-900">전체 신청 관리</h3>
+          <h3 className="text-xl font-bold text-slate-900 tracking-tight">전체 신청 관리</h3>
           <p className="text-slate-500 text-sm">비품 신청을 승인하거나 처리 상태를 관리합니다.</p>
         </div>
         <div className="flex gap-2 text-sm text-slate-500">
@@ -56,11 +56,11 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.06)] border border-slate-200/90 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-50 border-b border-slate-200">
+              <tr className="bg-slate-50/70 border-b border-slate-200">
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">신청자</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">품목(수량)</th>
                 <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">사유 및 URL</th>
@@ -70,7 +70,7 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {requests.map(req => (
-                <tr key={req.id} className="hover:bg-slate-50 transition-colors">
+                <tr key={req.id} className="hover:bg-slate-50/70 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-semibold text-slate-900">{req.employeeName}</div>
                   </td>
@@ -88,7 +88,7 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
                           href={req.purchaseUrl} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 text-xs font-medium"
+                          className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 text-xs font-semibold"
                         >
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                           구매 링크
@@ -105,26 +105,26 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
                         <input 
                           type="text"
                           placeholder="반려 사유 또는 코멘트"
-                          className="text-xs border rounded px-2 py-1 w-48"
+                          className="text-xs border border-slate-200 rounded-lg px-2 py-1.5 w-48 focus:outline-none focus:ring-2 focus:ring-slate-200"
                           value={comment}
                           onChange={(e) => setComment(e.target.value)}
                         />
                         <div className="flex gap-2">
                           <button 
                             onClick={() => handleStatusChange(req.id, RequestStatus.APPROVED, comment)}
-                            className="bg-blue-600 text-white text-xs px-2 py-1 rounded hover:bg-blue-700"
+                            className="bg-blue-600 text-white text-xs px-2 py-1.5 rounded-lg hover:bg-blue-700"
                           >
                             승인
                           </button>
                           <button 
                             onClick={() => handleStatusChange(req.id, RequestStatus.REJECTED, comment)}
-                            className="bg-red-600 text-white text-xs px-2 py-1 rounded hover:bg-red-700"
+                            className="bg-red-600 text-white text-xs px-2 py-1.5 rounded-lg hover:bg-red-700"
                           >
                             반려
                           </button>
                           <button 
                             onClick={() => setEditingId(null)}
-                            className="bg-slate-200 text-slate-600 text-xs px-2 py-1 rounded hover:bg-slate-300"
+                            className="bg-slate-200 text-slate-600 text-xs px-2 py-1.5 rounded-lg hover:bg-slate-300"
                           >
                             취소
                           </button>
@@ -135,7 +135,7 @@ const AdminView: React.FC<AdminViewProps> = ({ requests, onRefresh }) => {
                         {req.status === RequestStatus.PENDING && (
                           <button 
                             onClick={() => setEditingId(req.id)}
-                            className="text-indigo-600 hover:text-indigo-800 text-sm font-medium"
+                            className="text-indigo-600 hover:text-indigo-800 text-sm font-semibold"
                           >
                             처리하기
                           </button>

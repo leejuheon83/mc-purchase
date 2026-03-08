@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { SUPPLY_ITEMS } from '../constants';
 import { User } from '../types';
 import { storageService } from '../services/storageService';
 
@@ -10,22 +9,17 @@ interface RequestViewProps {
 }
 
 const RequestView: React.FC<RequestViewProps> = ({ user, onSuccess }) => {
-  const [selectedItem, setSelectedItem] = useState(SUPPLY_ITEMS[0]);
-  const [customItem, setCustomItem] = useState('');
+  const [item, setItem] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [reason, setReason] = useState('');
   const [purchaseUrl, setPurchaseUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // '기타(직접 입력)' 문자열 매칭
-  const isOtherSelected = selectedItem === '기타(직접 입력)';
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    const finalItem = isOtherSelected ? customItem.trim() : selectedItem;
-    
-    if (isOtherSelected && !finalItem) {
+
+    const finalItem = item.trim();
+    if (!finalItem) {
       alert('품목명을 입력해 주세요.');
       return;
     }
@@ -52,90 +46,80 @@ const RequestView: React.FC<RequestViewProps> = ({ user, onSuccess }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8 max-w-2xl mx-auto">
-      <div className="mb-8">
-        <h3 className="text-xl font-bold text-slate-900">신청서 작성</h3>
-        <p className="text-slate-500 text-sm mt-1">필요한 물품과 수량, 사유를 정확히 기재해 주세요.</p>
-      </div>
+    <div className="max-w-3xl">
+      <div className="bg-slate-50 border border-slate-400 rounded-2xl p-5">
+        <div className="mb-5">
+          <h3 className="text-xl font-bold text-slate-900 tracking-tight">빠른 신청</h3>
+          <p className="text-slate-500 text-sm mt-1">필요한 물품 정보를 한 번에 등록하세요.</p>
+        </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">품목 선택</label>
-          <select 
-            value={selectedItem}
-            onChange={(e) => setSelectedItem(e.target.value)}
-            className="w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-3 px-4 border"
-          >
-            {SUPPLY_ITEMS.map(i => (
-              <option key={i} value={i}>{i}</option>
-            ))}
-          </select>
-          
-          {isOtherSelected && (
-            <div className="mt-3">
-              <input 
-                type="text"
-                required
-                placeholder="신청할 품목명을 직접 입력하세요"
-                value={customItem}
-                onChange={(e) => setCustomItem(e.target.value)}
-                className="w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-3 px-4 border bg-indigo-50/30"
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">신청자</label>
+            <div className="w-full rounded-xl border border-slate-300 bg-white py-2.5 px-3 text-sm text-slate-700">
+              {user.name} ({user.employeeId})
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">품목 입력</label>
+            <input
+              type="text"
+              required
+              value={item}
+              onChange={(e) => setItem(e.target.value)}
+              placeholder="신청할 품목명을 입력하세요"
+              className="w-full rounded-xl border border-slate-300 bg-white py-2.5 px-3 text-sm"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">수량</label>
+              <input
+                type="number"
+                min="1"
+                max="100"
+                value={quantity}
+                onChange={(e) => setQuantity(parseInt(e.target.value, 10) || 1)}
+                className="w-full rounded-xl border border-slate-300 bg-white py-2.5 px-3 text-sm"
               />
             </div>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">수량</label>
-          <div className="flex items-center gap-4">
-            <input 
-              type="number" 
-              min="1" 
-              max="100"
-              value={quantity}
-              onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-              className="w-32 rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-3 px-4 border"
-            />
-            <span className="text-slate-500">개 / 개입</span>
+            <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">참고 URL (선택사항)</label>
+              <input
+                type="url"
+                value={purchaseUrl}
+                onChange={(e) => setPurchaseUrl(e.target.value)}
+                placeholder="구매 링크가 있으면 입력하세요"
+                className="w-full rounded-xl border border-slate-300 bg-white py-2.5 px-3 text-sm"
+              />
+            </div>
           </div>
-        </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">신청 사유</label>
-          <textarea 
-            required
-            rows={3}
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            placeholder="예: 프로젝트 팀 회의용 비품 충전, 신규 입사자 배정 등"
-            className="w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-3 px-4 border"
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-semibold text-slate-700 mb-2">신청 사유</label>
+            <textarea
+              required
+              rows={3}
+              value={reason}
+              onChange={(e) => setReason(e.target.value)}
+              placeholder="사용 목적을 간단히 적어 주세요 (5~200자)"
+              className="w-full rounded-xl border border-slate-300 bg-white py-2.5 px-3 text-sm"
+            />
+          </div>
 
-        <div>
-          <label className="block text-sm font-semibold text-slate-700 mb-2">참고 URL(필수)</label>
-          <input 
-            type="url"
-            required
-            value={purchaseUrl}
-            onChange={(e) => setPurchaseUrl(e.target.value)}
-            placeholder="구매 희망 품목의 웹사이트 주소나 URL이 있으면 입력해 주세요"
-            className="w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 py-3 px-4 border"
-          />
-        </div>
-
-        <div className="pt-4">
           <button
             type="submit"
             disabled={isSubmitting}
-            className={`w-full py-4 rounded-lg text-white font-bold transition-all shadow-md ${
-              isSubmitting ? 'bg-slate-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98]'
+            className={`w-full py-3 rounded-xl text-white font-semibold transition ${
+              isSubmitting ? 'bg-slate-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
             }`}
           >
-            {isSubmitting ? '제출 중...' : '신청서 제출'}
+            {isSubmitting ? '저장 중...' : '기록 저장'}
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
