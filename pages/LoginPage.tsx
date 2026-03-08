@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signInWithEmployeeNo, getKoreanFirebaseErrorMessage } from '../services/auth';
+import { signInWithEmployeeList, getKoreanFirebaseErrorMessage } from '../services/auth';
 import { useAuth } from '../context/AuthContext';
 import Logo from '../components/Logo';
 
@@ -33,10 +33,11 @@ export default function LoginPage() {
     }
     setLoading(true);
     try {
-      await signInWithEmployeeNo(employeeNo.trim(), password);
+      await signInWithEmployeeList(employeeNo.trim(), password);
       navigate('/dashboard', { replace: true });
     } catch (err) {
-      setError(getKoreanFirebaseErrorMessage(err));
+      const msg = err instanceof Error ? err.message : getKoreanFirebaseErrorMessage(err);
+      setError(msg);
     } finally {
       setLoading(false);
     }

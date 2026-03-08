@@ -10,8 +10,25 @@ import {
   type UserCredential
 } from 'firebase/auth';
 import { auth } from './firebase';
+import { employees } from '../data/employees';
 
 const SYNTHETIC_EMAIL_DOMAIN = '@mc-purchase.internal';
+const ADMIN_EMPLOYEE_ID = '1111';
+
+const employeesById = new Map(employees.map((e) => [e.employeeId, e]));
+
+/**
+ * 직원 목록에 있는 사번+비밀번호인지 검증.
+ * 비밀번호는 사번과 동일한 경우 허용, 관리자(1111)는 별도 비밀번호.
+ */
+function isValidEmployeeCredential(employeeNo: string, password: string): boolean {
+  const id = employeeNo.trim();
+  const pwd = password.trim();
+  if (!id || !pwd) return false;
+  if (id === ADMIN_EMPLOYEE_ID) return pwd === '1111';
+  if (employeesById.has(id)) return pwd === id;
+  return false;
+}
 
 /**
  * Convert employee number to synthetic email for Firebase Auth.
@@ -45,6 +62,42 @@ export async function signInWithEmployeeNo(
     throw new Error('사번을 입력해 주세요.');
   }
   return signInWithEmailAndPassword(auth, email, password);
+}
+
+/**
+ * 직원 목록 기반 로그인. 사번=비밀번호인 직원은 첫 로그인 시 자동으로 Firebase 사용자 생성.
+ */
+export async function signInWithEmployeeList(
+  employeeNo: string,
+  password: string
+): Promise<UserCredential> {
+  const id = employeeNo.trim();
+  const pwd = password;
+
+  if (!id) throw new Error('사번을 입력해 주세요.');
+  if (!pwd) throw new Error('비밀번호를 입력해 주세요.');
+
+  if (!isValidEmployeeCredential(id, pwd)) {
+    throw new Error('등록된 사번이 아니거나 비밀번호가 올바르지 않습니다.');
+  }
+
+  try {
+    return await signInWithEmployeeNo(id, pwd);
+  } catch (err: unknown) {
+    const code = err && typeof err === 'object' && 'code' in err ? (err as { code?: string }).code : '';
+    if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/invalid-login-credentials') {
+      try {
+        return await createUserWithEmployeeNo(id, pwd);
+      } catch (createErr: unknown) {
+        const createCode = createErr && typeof createErr === 'object' && 'code' in createErr ? (createErr as { code?: string }).code : '';
+        if (createCode === 'auth/email-already-in-use') {
+          throw new Error('사번 또는 비밀번호가 올바르지 않습니다.');
+        }
+        throw createErr;
+      }
+    }
+    throw err;
+  }
 }
 
 /**
