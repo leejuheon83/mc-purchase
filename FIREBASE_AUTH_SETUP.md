@@ -5,13 +5,16 @@
 1. [Firebase Console](https://console.firebase.google.com/) 접속
 2. 프로젝트 선택 (예: `mc-purchase`)
 
-## 2. Authentication 활성화
+## 2. Authentication 활성화 (필수)
+
+`auth/configuration-not-found` 오류는 이 단계를 건너뛸 때 발생합니다.
 
 1. **Authentication** 메뉴 이동
-2. **Sign-in method** 탭
-3. **Email/Password** 제공업체 선택
-4. **사용 설정** 토글 ON
-5. 저장
+2. 처음이면 **시작하기** 버튼 클릭
+3. **Sign-in method** 탭
+4. **Email/Password** 제공업체 선택
+5. **사용 설정** 토글 ON
+6. 저장
 
 ## 3. 첫 직원 사용자 추가
 

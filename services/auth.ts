@@ -137,7 +137,8 @@ export function getKoreanFirebaseErrorMessage(error: unknown): string {
       'auth/email-already-in-use': '이미 등록된 사번입니다.',
       'auth/weak-password': '비밀번호는 더 복잡하게 설정해주세요.',
       'auth/too-many-requests': '로그인 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.',
-      'auth/network-request-failed': '네트워크 오류가 발생했습니다. 연결을 확인해 주세요.'
+      'auth/network-request-failed': '네트워크 오류가 발생했습니다. 연결을 확인해 주세요.',
+      'auth/configuration-not-found': 'Firebase 인증이 설정되지 않았습니다. Firebase Console에서 Authentication > Sign-in method > 이메일/비밀번호를 사용 설정해 주세요.'
     };
     if (code && typeof code === 'string' && messages[code]) {
       return messages[code];
