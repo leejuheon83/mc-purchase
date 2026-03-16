@@ -16,7 +16,7 @@ const Layout: React.FC<LayoutProps> = ({ user, activeView, onViewChange, onLogou
     <div className="min-h-screen flex flex-col md:flex-row bg-slate-100 text-slate-900">
       <aside className="w-full md:w-72 bg-white border-r border-slate-200 flex flex-col z-20">
         <div className="px-6 py-5 border-b border-slate-200 bg-white flex justify-center md:justify-start overflow-hidden">
-          <Logo size="sm" />
+          <Logo size="md" />
         </div>
 
         <nav className="flex-1 p-4">
