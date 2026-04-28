@@ -13,21 +13,41 @@ import { auth } from './firebase';
 import { employees } from '../data/employees';
 
 const SYNTHETIC_EMAIL_DOMAIN = '@mc-purchase.internal';
-const ADMIN_EMPLOYEE_ID = '1111';
+
+/** 관리자 로그인 ID (화면 입력). Firebase 이메일: admin@mc-purchase.internal */
+export const ADMIN_LOGIN_ID = 'admin';
+/** 화면에 입력하는 관리자 비밀번호 */
+const ADMIN_LOGIN_PASSWORD = 'admin';
+/**
+ * Firebase Auth 최소 6자 — 로그인은 admin/admin, Firebase에는 adminadmin으로 저장·인증
+ */
+const ADMIN_FIREBASE_PASSWORD = 'adminadmin';
 
 const employeesById = new Map(employees.map((e) => [e.employeeId, e]));
 
 /**
  * 직원 목록에 있는 사번+비밀번호인지 검증.
- * 비밀번호는 사번과 동일한 경우 허용, 관리자(1111)는 별도 비밀번호.
+ * 비밀번호는 사번과 동일한 경우 허용, 관리자는 admin/admin.
  */
 function isValidEmployeeCredential(employeeNo: string, password: string): boolean {
-  const id = employeeNo.trim();
+  const id = employeeNo.trim().toLowerCase();
   const pwd = password.trim();
   if (!id || !pwd) return false;
-  if (id === ADMIN_EMPLOYEE_ID) return pwd === '1111';
-  if (employeesById.has(id)) return pwd === id;
+  if (id === ADMIN_LOGIN_ID) {
+    return pwd === ADMIN_LOGIN_PASSWORD;
+  }
+  if (employeesById.has(employeeNo.trim())) return pwd === employeeNo.trim();
   return false;
+}
+
+/** Firebase 호출용 비밀번호 (관리자는 6자 이상으로 정규화) */
+function firebasePasswordForEmployee(employeeNo: string, password: string): string {
+  const id = employeeNo.trim().toLowerCase();
+  const pwd = password.trim();
+  if (id === ADMIN_LOGIN_ID && pwd === ADMIN_LOGIN_PASSWORD) {
+    return ADMIN_FIREBASE_PASSWORD;
+  }
+  return password;
 }
 
 /**
@@ -81,13 +101,16 @@ export async function signInWithEmployeeList(
     throw new Error('등록된 사번이 아니거나 비밀번호가 올바르지 않습니다.');
   }
 
+  const canonicalId = id.toLowerCase() === ADMIN_LOGIN_ID ? ADMIN_LOGIN_ID : id;
+  const firebasePwd = firebasePasswordForEmployee(id, pwd);
+
   try {
-    return await signInWithEmployeeNo(id, pwd);
+    return await signInWithEmployeeNo(canonicalId, firebasePwd);
   } catch (err: unknown) {
     const code = err && typeof err === 'object' && 'code' in err ? (err as { code?: string }).code : '';
     if (code === 'auth/user-not-found' || code === 'auth/invalid-credential' || code === 'auth/invalid-login-credentials') {
       try {
-        return await createUserWithEmployeeNo(id, pwd);
+        return await createUserWithEmployeeNo(canonicalId, firebasePwd);
       } catch (createErr: unknown) {
         const createCode = createErr && typeof createErr === 'object' && 'code' in createErr ? (createErr as { code?: string }).code : '';
         if (createCode === 'auth/email-already-in-use') {
@@ -135,7 +158,7 @@ export function getKoreanFirebaseErrorMessage(error: unknown): string {
       'auth/wrong-password': '비밀번호가 올바르지 않습니다.',
       'auth/invalid-email': '사번 형식이 올바르지 않습니다.',
       'auth/email-already-in-use': '이미 등록된 사번입니다.',
-      'auth/weak-password': '비밀번호는 더 복잡하게 설정해주세요.',
+      'auth/weak-password': '비밀번호는 최소 6자 이상이어야 합니다.',
       'auth/too-many-requests': '로그인 시도가 너무 많습니다. 잠시 후 다시 시도해주세요.',
       'auth/network-request-failed': '네트워크 오류가 발생했습니다. 연결을 확인해 주세요.',
       'auth/configuration-not-found': 'Firebase 인증이 설정되지 않았습니다. Firebase Console에서 Authentication > Sign-in method > 이메일/비밀번호를 사용 설정해 주세요.'

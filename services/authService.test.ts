@@ -3,13 +3,13 @@ import { authService } from './authService';
 
 describe('authService.authenticate', () => {
   it('returns admin when admin credentials match', () => {
-    const result = authService.authenticate('1111', '1111');
+    const result = authService.authenticate('admin', 'admin');
     expect(result).not.toBeNull();
     expect(result?.type).toBe('admin');
   });
 
   it('returns null for invalid admin password', () => {
-    const result = authService.authenticate('1111', 'wrong');
+    const result = authService.authenticate('admin', 'wrong');
     expect(result).toBeNull();
   });
 

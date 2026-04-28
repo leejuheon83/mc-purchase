@@ -2,8 +2,8 @@ import { employees, type Employee } from '../data/employees';
 
 const employeesById = new Map(employees.map((employee) => [employee.employeeId, employee]));
 const ADMIN_CREDENTIALS = {
-  id: '1111',
-  password: '1111'
+  id: 'admin',
+  password: 'admin'
 } as const;
 
 type AuthResult =

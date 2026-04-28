@@ -4,20 +4,19 @@ import React, { createContext, useContext, useEffect, useState, useCallback } fr
 import { onAuthStateChanged, type User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
-import { emailToEmployeeNo } from '../services/auth';
+import { emailToEmployeeNo, ADMIN_LOGIN_ID } from '../services/auth';
 import { employees } from '../data/employees';
 import { DEPARTMENTS } from '../constants';
 import type { AuthUser, AuthContextValue } from '../types/auth';
 
 const employeesById = new Map(employees.map((e) => [e.employeeId, e]));
-const ADMIN_EMPLOYEE_ID = '1111';
 
 async function buildAuthUser(firebaseUser: FirebaseUser): Promise<AuthUser> {
   const email = firebaseUser.email ?? '';
   const employeeId = emailToEmployeeNo(email) || firebaseUser.uid;
   const employee = employeesById.get(employeeId);
-  const name = employee?.name ?? employeeId;
-  const isAdmin = employeeId === ADMIN_EMPLOYEE_ID;
+  const isAdmin = employeeId === ADMIN_LOGIN_ID;
+  const name = isAdmin ? '관리자' : (employee?.name ?? employeeId);
 
   // Firestore-ready: fetch from users/{uid} when available
   try {
@@ -42,7 +41,7 @@ async function buildAuthUser(firebaseUser: FirebaseUser): Promise<AuthUser> {
     employeeId,
     email,
     name,
-    department: DEPARTMENTS[Math.floor(Math.random() * DEPARTMENTS.length)],
+    department: isAdmin ? '관리자' : DEPARTMENTS[Math.floor(Math.random() * DEPARTMENTS.length)],
     isAdmin
   };
 }
