@@ -2,6 +2,7 @@
 import React from 'react';
 import { User, ViewType } from '../types';
 import Logo from './Logo';
+import PurchaseGuidePanel from './PurchaseGuidePanel';
 
 interface LayoutProps {
   user: User;
@@ -79,17 +80,22 @@ const Layout: React.FC<LayoutProps> = ({ user, activeView, onViewChange, onLogou
         </div>
       </aside>
 
-      <main className="flex-1 overflow-auto flex flex-col">
-        <header className="bg-slate-100 border-b border-slate-200 px-6 py-3 sticky top-0 z-10">
-          <h2 className="text-base font-bold text-slate-800 tracking-tight">
-            {activeView === 'REQUEST' && '사무용품 신청서 작성'}
-            {activeView === 'HISTORY' && '나의 신청 내역'}
-            {activeView === 'ADMIN' && '전사 신청 통합 관리'}
-          </h2>
-        </header>
-        <div className="p-6 max-w-7xl mx-auto w-full">
-          {children}
+      <main className="flex-1 flex flex-col lg:flex-row min-h-0 min-w-0 overflow-hidden">
+        <div className="flex-1 flex flex-col min-w-0 overflow-auto">
+          <header className="bg-slate-100 border-b border-slate-200 px-6 py-3 sticky top-0 z-10 shrink-0">
+            <h2 className="text-base font-bold text-slate-800 tracking-tight">
+              {activeView === 'REQUEST' && '사무용품 신청서 작성'}
+              {activeView === 'HISTORY' && '나의 신청 내역'}
+              {activeView === 'ADMIN' && '전사 신청 통합 관리'}
+            </h2>
+          </header>
+          <div className="p-6 max-w-7xl mx-auto w-full flex-1">
+            {children}
+          </div>
         </div>
+        <aside className="shrink-0 border-t lg:border-t-0 lg:border-l border-slate-200 bg-slate-50 lg:w-80 xl:w-96 p-4 lg:overflow-y-auto">
+          <PurchaseGuidePanel />
+        </aside>
       </main>
     </div>
   );
