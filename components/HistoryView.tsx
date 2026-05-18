@@ -45,7 +45,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
       return;
     }
     if (!editReason.trim()) {
-      setEditError('신청 사유를 입력해 주세요.');
+      setEditError('신청 사유(업무 목적성)를 입력해 주세요.');
       return;
     }
 
@@ -66,24 +66,32 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
 
   if (requests.length === 0) {
     return (
-      <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.06)] border border-slate-200/90 p-12 text-center">
-        <div className="mb-4 flex justify-center">
-          <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center">
-            <svg className="w-8 h-8 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/90 p-14 text-center shadow-[0_20px_50px_-32px_rgba(15,23,42,0.2)]">
+        <div className="absolute inset-0 bg-gradient-to-b from-white/80 to-transparent pointer-events-none" aria-hidden />
+        <div className="relative mb-5 flex justify-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-slate-100 to-slate-50 shadow-inner ring-1 ring-slate-200/80">
+            <svg className="h-9 w-9 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
           </div>
         </div>
-        <h3 className="text-lg font-semibold text-slate-900">신청 내역이 없습니다</h3>
-        <p className="text-slate-500 mt-1">필요한 사무용품을 신청해 보세요.</p>
+        <h3 className="relative text-xl font-bold text-slate-900 tracking-tight">신청 내역이 없습니다</h3>
+        <p className="relative text-slate-500 mt-2 text-sm">왼쪽 메뉴에서 필요한 사무용품을 신청해 보세요.</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-white rounded-2xl shadow-[0_10px_30px_rgba(15,23,42,0.06)] border border-slate-200/90 overflow-hidden">
+    <div className="relative overflow-hidden rounded-3xl border border-slate-200/80 bg-white/95 shadow-[0_24px_56px_-36px_rgba(15,23,42,0.22)] backdrop-blur-[2px]">
       <div className="overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
-            <tr className="bg-slate-50/70 border-b border-slate-200">
+            <tr className="border-b border-slate-200/90 bg-white">
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">신청일자</th>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">품목</th>
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">수량</th>
@@ -92,12 +100,12 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
               <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">관리</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100/90">
             {requests.map(req => (
               <React.Fragment key={req.id}>
-                <tr className="hover:bg-slate-50/70 transition-colors">
+                <tr className="transition-colors hover:bg-slate-50/60">
                   <td className="px-6 py-4 text-sm text-slate-600 whitespace-nowrap">
-                    {new Date(req.createdAt).toLocaleDateString()}
+                    {new Date(req.createdAt).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
                   </td>
                   <td className="px-6 py-4 text-sm font-semibold text-slate-900">
                     {req.item}
@@ -115,7 +123,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                           href={req.purchaseUrl} 
                           target="_blank" 
                           rel="noopener noreferrer"
-                          className="text-indigo-600 hover:text-indigo-800 flex items-center gap-1 text-xs font-semibold"
+                          className="inline-flex items-center gap-1 text-xs font-semibold text-[#00529B] hover:text-[#003d73]"
                         >
                           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                           URL 보기
@@ -138,7 +146,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                         <button
                           type="button"
                           onClick={() => startEdit(req)}
-                          className="text-xs font-semibold text-slate-600 hover:text-slate-900"
+                          className="rounded-lg px-2.5 py-1 text-xs font-semibold text-slate-600 hover:bg-white hover:text-[#00529B] hover:shadow-sm transition-all"
                         >
                           수정
                         </button>
@@ -151,7 +159,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                               alert('승인대기 상태에서만 취소할 수 있습니다.');
                             }
                           }}
-                          className="text-xs font-semibold text-red-500 hover:text-red-600"
+                          className="rounded-lg px-2.5 py-1 text-xs font-semibold text-rose-600 hover:bg-rose-50 transition-all"
                         >
                           취소
                         </button>
@@ -162,15 +170,15 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                   </td>
                 </tr>
                 {editingId === req.id && (
-                  <tr className="bg-slate-50/70">
-                    <td colSpan={6} className="px-6 py-5">
+                  <tr className="bg-slate-50/50">
+                    <td colSpan={6} className="px-6 py-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-xs font-semibold text-slate-600 mb-1">품목</label>
                           <select
                             value={editItem}
                             onChange={(e) => setEditItem(e.target.value)}
-                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 bg-white text-sm"
+                            className="ui-field py-2.5"
                           >
                             {SUPPLY_ITEMS.map(i => (
                               <option key={i} value={i}>{i}</option>
@@ -183,7 +191,7 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                               placeholder="신청할 품목명을 직접 입력하세요"
                               value={customItem}
                               onChange={(e) => setCustomItem(e.target.value)}
-                              className="mt-2 w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 bg-white text-sm"
+                              className="ui-field mt-2 py-2.5"
                             />
                           )}
                         </div>
@@ -195,43 +203,46 @@ const HistoryView: React.FC<HistoryViewProps> = ({ requests, onCancel, onUpdate 
                             max="100"
                             value={editQuantity}
                             onChange={(e) => setEditQuantity(parseInt(e.target.value) || 1)}
-                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 text-sm"
+                            className="ui-field py-2.5"
                           />
                         </div>
                         <div className="md:col-span-2">
-                          <label className="block text-xs font-semibold text-slate-600 mb-1">신청 사유</label>
+                          <label className="block text-xs font-semibold text-slate-600 mb-1">신청 사유(업무 목적성)</label>
                           <textarea
                             rows={2}
                             value={editReason}
                             onChange={(e) => setEditReason(e.target.value)}
-                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 text-sm"
+                            className="ui-field min-h-[4rem] resize-y py-2.5"
                           />
                         </div>
                         <div className="md:col-span-2">
-                          <label className="block text-xs font-semibold text-slate-600 mb-1">참고 URL (선택사항)</label>
+                          <label className="block text-xs font-semibold text-slate-600 mb-1">
+                            (회사 지정 모델로 구매 / 참조용 url 입력 가능)
+                          </label>
                           <input
                             type="url"
                             value={editPurchaseUrl}
                             onChange={(e) => setEditPurchaseUrl(e.target.value)}
-                            className="w-full rounded-lg border border-slate-200 shadow-sm focus:border-slate-300 focus:ring-slate-300 py-2 px-3 text-sm"
+                            placeholder="참조용 링크를 입력하세요 (선택)"
+                            className="ui-field py-2.5"
                           />
                         </div>
                       </div>
                       {editError && (
                         <div className="mt-3 text-xs text-red-500">{editError}</div>
                       )}
-                      <div className="mt-4 flex items-center justify-end gap-2">
+                      <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-200/80 pt-4">
                         <button
                           type="button"
                           onClick={cancelEdit}
-                          className="px-3 py-1.5 text-xs font-semibold text-slate-500 hover:text-slate-700"
+                          className="rounded-xl px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-white hover:shadow-sm transition-all"
                         >
                           취소
                         </button>
                         <button
                           type="button"
                           onClick={handleSave}
-                          className="px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 rounded-lg hover:bg-indigo-700"
+                          className="rounded-xl px-4 py-2 text-xs font-semibold text-white bg-gradient-to-br from-[#0063b8] to-[#00529B] shadow-md shadow-[#00529B]/25 hover:brightness-105 transition-all"
                         >
                           저장
                         </button>

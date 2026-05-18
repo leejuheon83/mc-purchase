@@ -9,8 +9,9 @@ function AuthRedirect() {
   const { user, loading } = useAuth();
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-100">
-        <p className="text-slate-600 font-medium">로딩 중...</p>
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-white">
+        <div className="ui-spinner" aria-hidden />
+        <p className="text-sm font-medium text-slate-600">로딩 중...</p>
       </div>
     );
   }

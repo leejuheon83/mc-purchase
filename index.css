@@ -2,9 +2,137 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 html,
 body,
 #root {
   margin: 0;
   min-height: 100%;
+  background: #ffffff;
+}
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(0, 82, 155, 0.18);
+  color: inherit;
+}
+
+/* 폼 필드 공통 포커스 — CDN Tailwind와 함께 클래스명으로 재사용 */
+.ui-field {
+  width: 100%;
+  border-radius: 0.875rem;
+  border: 1px solid rgb(226 232 240 / 0.95);
+  background-color: rgb(255 255 255);
+  padding: 0.625rem 0.875rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  color: rgb(15 23 42 / 0.92);
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    background-color 0.18s ease;
+}
+
+.ui-field::placeholder {
+  color: rgb(148 163 184);
+}
+
+.ui-field:hover {
+  border-color: rgb(203 213 225);
+}
+
+.ui-field:focus {
+  outline: none;
+  border-color: rgb(0 82 155 / 0.45);
+  box-shadow:
+    0 0 0 4px rgb(0 82 155 / 0.11),
+    0 1px 2px rgb(15 23 42 / 0.06);
+}
+
+.ui-field:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.ui-readonly {
+  background: linear-gradient(180deg, rgb(248 250 252) 0%, rgb(255 255 255) 100%);
+  color: rgb(51 65 85);
+}
+
+.ui-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.8125rem 1rem;
+  border-radius: 0.875rem;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(165deg, #0063b8 0%, #00529b 48%, #004080 100%);
+  box-shadow:
+    0 4px 14px -2px rgb(0 82 155 / 0.45),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+.ui-btn-primary:hover:not(:disabled) {
+  filter: brightness(1.05);
+  box-shadow:
+    0 6px 20px -4px rgb(0 82 155 / 0.5),
+    inset 0 1px 0 rgb(255 255 255 / 0.15);
+}
+
+.ui-btn-primary:active:not(:disabled) {
+  transform: scale(0.992);
+}
+
+.ui-btn-primary:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  filter: none;
+  box-shadow: none;
+}
+
+@keyframes ui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ui-spinner {
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  border: 3px solid rgb(226 232 240);
+  border-top-color: #00529b;
+  animation: ui-spin 0.75s linear infinite;
+}
+
+/* 관리자 상세 팝업 — CDN Tailwind 누락·반투명 유틸 대비 불투명 배경 고정 */
+.admin-modal-panel {
+  background-color: #ffffff;
+  box-shadow:
+    0 25px 50px -12px rgb(15 23 42 / 0.28),
+    0 0 0 1px rgb(226 232 240);
+}
+
+.admin-modal-panel-inner {
+  background-color: rgb(248 250 252);
+  border: 1px solid rgb(241 245 249);
 }

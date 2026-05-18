@@ -25,7 +25,8 @@ export const STATUS_UI = {
   },
   [RequestStatus.APPROVED]: {
     label: '승인완료',
-    color: 'bg-blue-100 text-blue-800 border-blue-200'
+    color:
+      'bg-[#00529B]/10 text-[#004080] border-[#00529B]/20 shadow-[0_1px_2px_rgba(0,82,155,0.06)]'
   },
   [RequestStatus.REJECTED]: {
     label: '반려됨',
